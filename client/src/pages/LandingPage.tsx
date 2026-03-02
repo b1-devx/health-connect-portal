@@ -40,16 +40,6 @@ export default function LandingPage() {
               <Button asChild size="lg" className="h-14 px-8 rounded-full text-lg shadow-xl shadow-primary/25 hover:-translate-y-1 transition-all">
                 <a href="/api/login">Get Started Today</a>
               </Button>
-              {import.meta.env.DEV && (
-                <div className="flex gap-2">
-                  <Button asChild variant="secondary" size="lg" className="h-14 px-6 rounded-full text-lg shadow-md border-slate-200">
-                    <a href="/api/auth/dev-login/doctor">Login as Doctor</a>
-                  </Button>
-                  <Button asChild variant="secondary" size="lg" className="h-14 px-6 rounded-full text-lg shadow-md border-slate-200">
-                    <a href="/api/auth/dev-login/patient">Login as Patient</a>
-                  </Button>
-                </div>
-              )}
               <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-full text-lg border-slate-200 hover:bg-slate-50">
                 <a href="#features">Learn More</a>
               </Button>

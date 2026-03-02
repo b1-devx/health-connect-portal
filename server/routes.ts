@@ -13,33 +13,6 @@ export async function registerRoutes(
   await setupAuth(app);
   registerAuthRoutes(app);
 
-  // Dev-only: Bypass login for testing
-  if (process.env.NODE_ENV === 'development') {
-    app.get("/api/auth/dev-login/:role", async (req, res) => {
-      const { role } = req.params;
-      const devUserId = `dev-${role}-id`;
-      
-      // Upsert a dev user
-      const [user] = await storage.upsertUser({
-        id: devUserId,
-        email: `${role}@example.com`,
-        firstName: "Dev",
-        lastName: role.charAt(0).toUpperCase() + role.slice(1),
-      });
-
-      // Set session manually to mimic Replit Auth session
-      (req.session as any).user = {
-        id: user.id,
-        claims: { sub: user.id },
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      };
-
-      res.redirect("/");
-    });
-  }
-
   // Profile Routes
   app.get(api.profiles.me.path, isAuthenticated, async (req: any, res) => {
     const userId = req.user.claims.sub;
