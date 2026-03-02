@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Activity, Calendar, FileText, Pill, Users, Home, Bell, LogOut, Menu, X, MessageSquare } from "lucide-react";
+import { Activity, Calendar, FileText, Pill, Users, Home, Bell, LogOut, Menu, X, MessageSquare, Stethoscope } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profiles";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (isDoctor) {
     navigation.splice(1, 0, { name: "Patients", href: "/patients", icon: Users });
+  } else {
+    navigation.splice(1, 0, { name: "Doctors", href: "/doctors", icon: Stethoscope });
   }
 
   const NavLinks = () => (

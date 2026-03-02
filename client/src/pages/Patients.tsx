@@ -29,17 +29,27 @@ export default function PatientsPage() {
         {patients?.length ? patients.map((patient) => (
           <Card key={patient.id} className="hover:border-primary/50 transition-colors">
             <div className="flex items-center gap-4 mb-6">
-              <img 
-                src={`https://ui-avatars.com/api/?name=${patient.user.firstName}+${patient.user.lastName}&background=E0F2FE&color=0EA5E9&size=128`} 
-                alt="Patient Profile" 
-                className="w-16 h-16 rounded-full border-4 border-white shadow-sm"
-              />
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 font-display">
-                  {patient.user.firstName} {patient.user.lastName}
-                </h3>
-                <p className="text-sm text-slate-500">Patient ID: #{patient.id.toString().padStart(4, '0')}</p>
-              </div>
+              {(() => {
+                const displayFirst = (patient as any).firstName || patient.user.firstName || "";
+                const displayLast = (patient as any).lastName || patient.user.lastName || "";
+                const photo = (patient as any).profilePhotoUrl || patient.user.profileImageUrl;
+                const avatarUrl = `https://ui-avatars.com/api/?name=${displayFirst}+${displayLast}&background=E0F2FE&color=0EA5E9&size=128`;
+                return (
+                  <>
+                    <img
+                      src={photo || avatarUrl}
+                      alt="Patient Profile"
+                      className="w-16 h-16 rounded-full border-4 border-white shadow-sm object-cover"
+                    />
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 font-display">
+                        {displayFirst} {displayLast}
+                      </h3>
+                      <p className="text-sm text-slate-500">Patient ID: #{patient.id.toString().padStart(4, '0')}</p>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
             
             <div className="space-y-3 text-sm">

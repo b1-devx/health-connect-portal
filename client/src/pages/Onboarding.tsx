@@ -88,7 +88,7 @@ export default function Onboarding() {
   };
 
   const canNext = () => {
-    if (step === 1) return firstName.trim() && lastName.trim() && phone.trim();
+    if (step === 1) return firstName.trim() && lastName.trim() && phone.trim() && profilePhotoUrl;
     if (step === 2 && role === "doctor") return specialty.trim() && licenseNumber.trim();
     if (step === 2 && role === "patient") return dateOfBirth.trim();
     if (step === 3 && role === "patient") return emergencyName.trim() && emergencyRelationship.trim() && emergencyPhone.trim();
@@ -211,6 +211,11 @@ export default function Onboarding() {
                   <Camera className="w-4 h-4" />
                   {photoPreview ? "Change Photo" : "Upload Profile Photo"}
                 </button>
+                {!photoPreview && (
+                  <p className="text-xs text-destructive font-medium flex items-center gap-1">
+                    <span className="text-destructive">*</span> Profile photo is required
+                  </p>
+                )}
                 <input
                   ref={photoInputRef}
                   type="file"
