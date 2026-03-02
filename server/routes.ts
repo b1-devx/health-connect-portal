@@ -203,5 +203,27 @@ export async function registerRoutes(
     }
   });
 
+  // Messages
+  app.get(api.messages.list.path, isAuthenticated, async (req: any, res) => {
+    const userId = req.user.claims.sub;
+    const otherUserId = req.params.otherUserId;
+    const results = await storage.getMessages(userId, otherUserId);
+    res.json(results);
+  });
+
+  app.post(api.messages.create.path, isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const input = api.messages.create.input.parse({ ...req.body, senderId: userId });
+      const message = await storage.createMessage(input);
+      res.status(201).json(message);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   return httpServer;
 }

@@ -6,6 +6,7 @@ import {
   labResults, 
   prescriptions, 
   patientRequests,
+  messages,
   users,
   type Profile,
   type InsertProfile,
@@ -17,6 +18,8 @@ import {
   type InsertPrescription,
   type PatientRequest,
   type InsertPatientRequest,
+  type Message,
+  type InsertMessage,
   type User
 } from "@shared/schema";
 
@@ -47,6 +50,10 @@ export interface IStorage {
   getRequestsForPatient(patientId: string): Promise<(PatientRequest & { patient: User })[]>;
   createPatientRequest(request: InsertPatientRequest): Promise<PatientRequest & { patient: User }>;
   updatePatientRequestStatus(id: number, status: string): Promise<PatientRequest & { patient: User }>;
+
+  // Messages
+  getMessages(user1Id: string, user2Id: string): Promise<(Message & { sender: User, receiver: User })[]>;
+  createMessage(message: InsertMessage): Promise<Message & { sender: User, receiver: User }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -85,7 +92,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPatientsForDoctor(doctorId: string): Promise<(Profile & { user: User })[]> {
-    // Return all patients that have an appointment with this doctor
     const patientIds = await db.select({ id: appointments.patientId })
       .from(appointments)
       .where(eq(appointments.doctorId, doctorId));
@@ -94,7 +100,6 @@ export class DatabaseStorage implements IStorage {
     
     if (ids.length === 0) return [];
     
-    // Fallback: Just return all patients for MVP simplicity if no specific filtering needed
     const results = await db.select()
       .from(profiles)
       .innerJoin(users, eq(profiles.userId, users.id))
@@ -112,7 +117,6 @@ export class DatabaseStorage implements IStorage {
     return results.map(r => ({ ...r.profiles, user: r.users }));
   }
 
-  // Appointments
   async getAppointmentsForUser(userId: string, role: string): Promise<(Appointment & { patient: User, doctor: User })[]> {
     const condition = role === 'doctor' 
       ? eq(appointments.doctorId, userId) 
@@ -145,7 +149,6 @@ export class DatabaseStorage implements IStorage {
     return { ...updatedApt, patient, doctor };
   }
 
-  // Lab Results
   async getLabResultsForPatient(patientId: string): Promise<(LabResult & { patient: User, doctor: User | null })[]> {
     const results = await db.select().from(labResults).where(eq(labResults.patientId, patientId));
     
@@ -169,7 +172,6 @@ export class DatabaseStorage implements IStorage {
     return { ...newResult, patient, doctor };
   }
 
-  // Prescriptions
   async getPrescriptionsForPatient(patientId: string): Promise<(Prescription & { patient: User, doctor: User })[]> {
     const results = await db.select().from(prescriptions).where(eq(prescriptions.patientId, patientId));
     
@@ -187,9 +189,7 @@ export class DatabaseStorage implements IStorage {
     return { ...newRx, patient, doctor };
   }
 
-  // Patient Requests
   async getRequestsForDoctor(doctorId: string): Promise<(PatientRequest & { patient: User })[]> {
-    // For MVP, returning all pending/active requests for doctors to view
     const results = await db.select().from(patientRequests);
     
     return Promise.all(results.map(async (req) => {
@@ -217,6 +217,31 @@ export class DatabaseStorage implements IStorage {
     const [updatedReq] = await db.update(patientRequests).set({ status }).where(eq(patientRequests.id, id)).returning();
     const [patient] = await db.select().from(users).where(eq(users.id, updatedReq.patientId));
     return { ...updatedReq, patient };
+  }
+
+  async getMessages(user1Id: string, user2Id: string): Promise<(Message & { sender: User, receiver: User })[]> {
+    const results = await db.select()
+      .from(messages)
+      .where(
+        or(
+          and(eq(messages.senderId, user1Id), eq(messages.receiverId, user2Id)),
+          and(eq(messages.senderId, user2Id), eq(messages.receiverId, user1Id))
+        )
+      )
+      .orderBy(messages.createdAt);
+    
+    return Promise.all(results.map(async (msg) => {
+      const [sender] = await db.select().from(users).where(eq(users.id, msg.senderId));
+      const [receiver] = await db.select().from(users).where(eq(users.id, msg.receiverId));
+      return { ...msg, sender, receiver };
+    }));
+  }
+
+  async createMessage(message: InsertMessage): Promise<Message & { sender: User, receiver: User }> {
+    const [newMsg] = await db.insert(messages).values(message).returning();
+    const [sender] = await db.select().from(users).where(eq(users.id, newMsg.senderId));
+    const [receiver] = await db.select().from(users).where(eq(users.id, newMsg.receiverId));
+    return { ...newMsg, sender, receiver };
   }
 }
 

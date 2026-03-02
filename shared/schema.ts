@@ -1,4 +1,4 @@
-import { pgTable, text, serial, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, varchar, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -54,12 +54,21 @@ export const patientRequests = pgTable("patient_requests", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  senderId: varchar("sender_id").notNull().references(() => users.id),
+  receiverId: varchar("receiver_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // Zod schemas
 export const insertProfileSchema = createInsertSchema(profiles).omit({ id: true });
 export const insertAppointmentSchema = createInsertSchema(appointments).omit({ id: true, status: true });
 export const insertLabResultSchema = createInsertSchema(labResults).omit({ id: true, date: true });
 export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({ id: true, issuedAt: true });
 export const insertPatientRequestSchema = createInsertSchema(patientRequests).omit({ id: true, status: true, createdAt: true });
+export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 
 // Explicit Types
 export type Profile = typeof profiles.$inferSelect;
@@ -76,6 +85,9 @@ export type InsertPrescription = z.infer<typeof insertPrescriptionSchema>;
 
 export type PatientRequest = typeof patientRequests.$inferSelect;
 export type InsertPatientRequest = z.infer<typeof insertPatientRequestSchema>;
+
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
 
 // Request Types for API
 export type CreateProfileRequest = InsertProfile;

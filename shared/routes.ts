@@ -5,11 +5,13 @@ import {
   insertLabResultSchema, 
   insertPrescriptionSchema, 
   insertPatientRequestSchema,
+  insertMessageSchema,
   profiles,
   appointments,
   labResults,
   prescriptions,
-  patientRequests
+  patientRequests,
+  messages
 } from './schema';
 import { users } from './models/auth';
 
@@ -35,6 +37,7 @@ const appointmentWithDetailsSchema = z.custom<typeof appointments.$inferSelect &
 const labResultWithDetailsSchema = z.custom<typeof labResults.$inferSelect & { patient: typeof users.$inferSelect, doctor?: typeof users.$inferSelect | null }>();
 const prescriptionWithDetailsSchema = z.custom<typeof prescriptions.$inferSelect & { patient: typeof users.$inferSelect, doctor: typeof users.$inferSelect }>();
 const requestWithPatientSchema = z.custom<typeof patientRequests.$inferSelect & { patient: typeof users.$inferSelect }>();
+const messageWithDetailsSchema = z.custom<typeof messages.$inferSelect & { sender: typeof users.$inferSelect, receiver: typeof users.$inferSelect }>();
 
 export const api = {
   profiles: {
@@ -167,6 +170,24 @@ export const api = {
       responses: {
         200: requestWithPatientSchema,
         404: errorSchemas.notFound,
+      }
+    }
+  },
+  messages: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/messages/:otherUserId' as const,
+      responses: {
+        200: z.array(messageWithDetailsSchema),
+      }
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/messages' as const,
+      input: insertMessageSchema,
+      responses: {
+        201: messageWithDetailsSchema,
+        400: errorSchemas.validation,
       }
     }
   }

@@ -1,5 +1,7 @@
 import React from "react";
 
+export { Button } from "@/components/ui/button";
+
 export function PageHeader({ title, description, action }: { title: string, description?: string, action?: React.ReactNode }) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
