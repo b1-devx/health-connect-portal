@@ -57,7 +57,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-border sticky top-0 z-50">
         <div className="flex items-center gap-2 text-primary">
           <Activity className="w-6 h-6" />
-          <span className="font-display font-bold text-lg">NovaCare</span>
+          <span className="font-display font-bold text-lg">WellA app</span>
         </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
           {isMobileMenuOpen ? <X className="w-6 h-6 text-slate-600" /> : <Menu className="w-6 h-6 text-slate-600" />}
@@ -74,7 +74,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-teal-400 flex items-center justify-center shadow-lg shadow-primary/20">
             <Activity className="w-6 h-6 text-white" />
           </div>
-          <span className="font-display font-bold text-2xl tracking-tight text-slate-800">Nova<span className="text-primary">Care</span></span>
+          <span className="font-display font-bold text-2xl tracking-tight text-slate-800">WellA <span className="text-primary">app</span></span>
         </div>
 
         <div className="px-6 pb-6">

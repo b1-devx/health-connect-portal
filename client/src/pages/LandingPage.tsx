@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2 text-primary">
             <Activity className="w-8 h-8" />
-            <span className="font-display font-bold text-2xl text-slate-900">Nova<span className="text-primary">Care</span></span>
+            <span className="font-display font-bold text-2xl text-slate-900">WellA <span className="text-primary">app</span></span>
           </div>
           <Button asChild size="lg" className="rounded-full shadow-lg shadow-primary/20 font-semibold px-8">
             <a href="/api/login">Sign In / Register</a>

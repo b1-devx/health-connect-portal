@@ -37,7 +37,7 @@ export default function Onboarding() {
       <div className="max-w-xl w-full bg-white rounded-[2rem] shadow-2xl p-8 sm:p-12 border border-slate-100 animate-slide-up">
         
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-display font-bold text-slate-900">Welcome to NovaCare</h1>
+          <h1 className="text-3xl font-display font-bold text-slate-900">Welcome to WellA app</h1>
           <p className="text-slate-500 mt-2">Let's get your profile set up, {user.firstName}.</p>
         </div>
 
