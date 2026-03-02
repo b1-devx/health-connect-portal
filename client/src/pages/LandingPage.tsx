@@ -49,9 +49,9 @@ export default function LandingPage() {
           <div className="relative animate-slide-up delay-200 hidden lg:block">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-teal-400/20 rounded-[3rem] transform rotate-3 scale-105 blur-2xl"></div>
             <img 
-              src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=2000&auto=format&fit=crop" 
+              src="/doctor-hero.jpg" 
               alt="Medical Professional" 
-              className="relative z-10 w-full h-auto rounded-[3rem] shadow-2xl object-cover aspect-[4/3] border-4 border-white"
+              className="relative z-10 w-full h-auto rounded-[3rem] shadow-2xl object-cover aspect-[4/3] border-4 border-white object-top"
             />
             
             {/* Floating UI element */}
