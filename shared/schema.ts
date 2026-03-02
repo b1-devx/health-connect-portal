@@ -10,9 +10,26 @@ export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull().references(() => users.id),
   role: text("role").notNull(), // 'doctor' or 'patient'
-  specialty: text("specialty"), // for doctors
-  medicalHistory: text("medical_history"), // for patients
-  dateOfBirth: timestamp("date_of_birth"), // for patients
+
+  // Basic info (both roles)
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  phone: text("phone"),
+  address: text("address"),
+  profilePhotoUrl: text("profile_photo_url"),
+
+  // Doctor fields
+  specialty: text("specialty"),
+  licenseNumber: text("license_number"),
+
+  // Patient fields
+  dateOfBirth: timestamp("date_of_birth"),
+  medicalHistory: text("medical_history"),
+
+  // Emergency contact (patient only)
+  emergencyContactName: text("emergency_contact_name"),
+  emergencyContactRelationship: text("emergency_contact_relationship"),
+  emergencyContactPhone: text("emergency_contact_phone"),
 });
 
 export const appointments = pgTable("appointments", {
@@ -31,7 +48,7 @@ export const appointments = pgTable("appointments", {
 export const labResults = pgTable("lab_results", {
   id: serial("id").primaryKey(),
   patientId: varchar("patient_id").notNull().references(() => users.id),
-  doctorId: varchar("doctor_id").references(() => users.id), // optional, might be uploaded by patient
+  doctorId: varchar("doctor_id").references(() => users.id),
   title: text("title").notNull(),
   date: timestamp("date").notNull().defaultNow(),
   resultData: text("result_data"),
@@ -54,9 +71,9 @@ export const patientRequests = pgTable("patient_requests", {
   type: text("type").notNull(), // 'checkup' or 'prescription'
   description: text("description").notNull(),
   status: text("status").notNull().default("pending"), // pending, fulfilled, rejected
-  labFileUrl: text("lab_file_url"), // optional lab result file URL attachment
-  labResultText: text("lab_result_text"), // optional lab result text notes
-  aiAnalysis: text("ai_analysis"), // AI-generated analysis result
+  labFileUrl: text("lab_file_url"),
+  labResultText: text("lab_result_text"),
+  aiAnalysis: text("ai_analysis"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

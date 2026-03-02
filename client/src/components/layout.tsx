@@ -79,17 +79,27 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
         <div className="px-6 pb-6">
           <div className="bg-slate-50 rounded-2xl p-4 flex items-center gap-3 border border-slate-100">
-            <img 
-              src={user?.profileImageUrl || `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=0D8BFF&color=fff`} 
-              alt="Profile" 
-              className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
-            />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-800 truncate">
-                {isDoctor ? "Dr. " : ""}{user?.firstName} {user?.lastName}
-              </p>
-              <p className="text-xs text-slate-500 capitalize">{profile?.role || "User"}</p>
-            </div>
+            {(() => {
+              const displayFirst = profile?.firstName || user?.firstName || "";
+              const displayLast = profile?.lastName || user?.lastName || "";
+              const photo = profile?.profilePhotoUrl || user?.profileImageUrl;
+              const avatarUrl = `https://ui-avatars.com/api/?name=${displayFirst}+${displayLast}&background=0D8BFF&color=fff`;
+              return (
+                <>
+                  <img
+                    src={photo || avatarUrl}
+                    alt="Profile"
+                    className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-800 truncate">
+                      {isDoctor ? "Dr. " : ""}{displayFirst} {displayLast}
+                    </p>
+                    <p className="text-xs text-slate-500 capitalize">{profile?.role || "User"}</p>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
 
