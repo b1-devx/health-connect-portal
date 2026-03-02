@@ -28,7 +28,7 @@ export default function Onboarding() {
       role,
       specialty: role === "doctor" ? specialty : undefined,
       medicalHistory: role === "patient" ? medicalHistory : undefined,
-      dateOfBirth: role === "patient" && dateOfBirth ? new Date(dateOfBirth).toISOString() : undefined,
+      dateOfBirth: role === "patient" && dateOfBirth ? dateOfBirth : undefined,
     });
   };
 

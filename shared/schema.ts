@@ -63,7 +63,9 @@ export const messages = pgTable("messages", {
 });
 
 // Zod schemas
-export const insertProfileSchema = createInsertSchema(profiles).omit({ id: true });
+export const insertProfileSchema = createInsertSchema(profiles, {
+  dateOfBirth: z.string().optional().transform(v => v ? new Date(v) : undefined),
+}).omit({ id: true });
 export const insertAppointmentSchema = createInsertSchema(appointments).omit({ id: true, status: true });
 export const insertLabResultSchema = createInsertSchema(labResults).omit({ id: true, date: true });
 export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({ id: true, issuedAt: true });
