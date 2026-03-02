@@ -24,11 +24,11 @@ export default function Onboarding() {
     if (!role) return;
 
     createProfile.mutate({
-      userId: user.claims?.sub || "",
+      userId: user.id,
       role,
       specialty: role === "doctor" ? specialty : undefined,
       medicalHistory: role === "patient" ? medicalHistory : undefined,
-      dateOfBirth: role === "patient" && dateOfBirth ? dateOfBirth : undefined,
+      dateOfBirth: role === "patient" && dateOfBirth ? new Date(dateOfBirth) : undefined,
     });
   };
 

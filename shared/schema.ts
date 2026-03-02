@@ -23,6 +23,9 @@ export const appointments = pgTable("appointments", {
   status: text("status").notNull().default("pending"), // pending, confirmed, completed, cancelled
   meetLink: text("meet_link"),
   notes: text("notes"),
+  labFileUrl: text("lab_file_url"),
+  labResultText: text("lab_result_text"),
+  aiAnalysis: text("ai_analysis"),
 });
 
 export const labResults = pgTable("lab_results", {
@@ -69,7 +72,7 @@ export const messages = pgTable("messages", {
 export const insertProfileSchema = createInsertSchema(profiles, {
   dateOfBirth: z.string().optional().transform(v => v ? new Date(v) : undefined),
 }).omit({ id: true });
-export const insertAppointmentSchema = createInsertSchema(appointments).omit({ id: true, status: true });
+export const insertAppointmentSchema = createInsertSchema(appointments).omit({ id: true, status: true, aiAnalysis: true });
 export const insertLabResultSchema = createInsertSchema(labResults).omit({ id: true, date: true });
 export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({ id: true, issuedAt: true });
 export const insertPatientRequestSchema = createInsertSchema(patientRequests).omit({ id: true, status: true, createdAt: true, aiAnalysis: true });

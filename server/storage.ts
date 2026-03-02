@@ -35,7 +35,8 @@ export interface IStorage {
   // Appointments
   getAppointmentsForUser(userId: string, role: string): Promise<(Appointment & { patient: User, doctor: User })[]>;
   createAppointment(appointment: InsertAppointment): Promise<Appointment & { patient: User, doctor: User }>;
-  updateAppointment(id: number, updates: Partial<InsertAppointment>): Promise<Appointment & { patient: User, doctor: User }>;
+  updateAppointment(id: number, updates: Partial<InsertAppointment & { aiAnalysis?: string }>): Promise<Appointment & { patient: User, doctor: User }>;
+  updateAppointmentAiAnalysis(id: number, aiAnalysis: string): Promise<Appointment & { patient: User, doctor: User }>;
 
   // Lab Results
   getLabResultsForPatient(patientId: string): Promise<(LabResult & { patient: User, doctor: User | null })[]>;
@@ -143,8 +144,15 @@ export class DatabaseStorage implements IStorage {
     return { ...newApt, patient, doctor };
   }
 
-  async updateAppointment(id: number, updates: Partial<InsertAppointment>): Promise<Appointment & { patient: User, doctor: User }> {
+  async updateAppointment(id: number, updates: Partial<InsertAppointment & { aiAnalysis?: string }>): Promise<Appointment & { patient: User, doctor: User }> {
     const [updatedApt] = await db.update(appointments).set(updates).where(eq(appointments.id, id)).returning();
+    const [patient] = await db.select().from(users).where(eq(users.id, updatedApt.patientId));
+    const [doctor] = await db.select().from(users).where(eq(users.id, updatedApt.doctorId));
+    return { ...updatedApt, patient, doctor };
+  }
+
+  async updateAppointmentAiAnalysis(id: number, aiAnalysis: string): Promise<Appointment & { patient: User, doctor: User }> {
+    const [updatedApt] = await db.update(appointments).set({ aiAnalysis }).where(eq(appointments.id, id)).returning();
     const [patient] = await db.select().from(users).where(eq(users.id, updatedApt.patientId));
     const [doctor] = await db.select().from(users).where(eq(users.id, updatedApt.doctorId));
     return { ...updatedApt, patient, doctor };

@@ -221,6 +221,48 @@ export async function registerRoutes(
     }
   });
 
+  // AI Analysis for appointments
+  app.post('/api/appointments/:id/analyze', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const profile = await storage.getProfile(userId);
+      if (profile?.role !== 'doctor') {
+        return res.status(403).json({ message: 'Only doctors can run AI analysis' });
+      }
+
+      const appointments = await storage.getAppointmentsForUser(userId, 'doctor');
+      const appointment = appointments.find(a => a.id === id);
+      if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+      const patientName = `${appointment.patient.firstName || ''} ${appointment.patient.lastName || ''}`.trim() || 'Unknown Patient';
+
+      const contextParts = [
+        `You are a medical AI assistant helping a doctor prepare for an upcoming appointment.`,
+        `Patient: ${patientName}`,
+        `Appointment: ${new Date(appointment.datetime).toLocaleString()}`,
+      ];
+
+      if (appointment.notes) contextParts.push(`Doctor Notes: ${appointment.notes}`);
+      if (appointment.labResultText) contextParts.push(`Lab Result Notes from Patient:\n${appointment.labResultText}`);
+      if (appointment.labFileUrl) contextParts.push(`Lab File URL: ${appointment.labFileUrl}`);
+
+      contextParts.push(`\nBased on the above context, provide a concise pre-appointment analysis including:\n1. Summary of any lab data provided\n2. Key concerns to address during the appointment\n3. Suggested examination or follow-up questions\n\nKeep the response clear and professional for a medical setting.`);
+
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: contextParts.join('\n\n'),
+      });
+
+      const analysis = response.text || 'Unable to generate analysis.';
+      const updated = await storage.updateAppointmentAiAnalysis(id, analysis);
+      res.json(updated);
+    } catch (err) {
+      console.error('AI analysis error:', err);
+      res.status(500).json({ message: 'Failed to run AI analysis' });
+    }
+  });
+
   // AI Analysis for patient requests
   app.post('/api/requests/:id/analyze', isAuthenticated, async (req: any, res) => {
     try {
