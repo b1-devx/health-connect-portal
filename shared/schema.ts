@@ -53,6 +53,8 @@ export const labResults = pgTable("lab_results", {
   date: timestamp("date").notNull().defaultNow(),
   resultData: text("result_data"),
   fileUrl: text("file_url"),
+  fileData: text("file_data"),   // base64 encoded uploaded file
+  fileName: text("file_name"),   // original filename
 });
 
 export const prescriptions = pgTable("prescriptions", {
@@ -81,7 +83,10 @@ export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
   senderId: varchar("sender_id").notNull().references(() => users.id),
   receiverId: varchar("receiver_id").notNull().references(() => users.id),
-  content: text("content").notNull(),
+  content: text("content").notNull().default(""),
+  attachmentData: text("attachment_data"), // base64 encoded file
+  attachmentName: text("attachment_name"), // original filename
+  attachmentType: text("attachment_type"), // mime type
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

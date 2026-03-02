@@ -3,6 +3,13 @@ import { api, buildUrl } from "@shared/routes";
 import { apiRequest } from "@/lib/queryClient";
 import type { Message } from "@shared/schema";
 
+export interface MessagePayload {
+  content: string;
+  attachmentData?: string;
+  attachmentName?: string;
+  attachmentType?: string;
+}
+
 export function useMessages(otherUserId?: string) {
   const queryClient = useQueryClient();
 
@@ -10,25 +17,28 @@ export function useMessages(otherUserId?: string) {
     queryKey: [buildUrl(api.messages.list.path, { otherUserId: otherUserId || "" })],
     queryFn: async () => {
       if (!otherUserId) return [];
-      const res = await fetch(buildUrl(api.messages.list.path, { otherUserId }));
+      const res = await fetch(buildUrl(api.messages.list.path, { otherUserId }), { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch messages");
       return res.json();
     },
     enabled: !!otherUserId,
-    refetchInterval: 3000, // Poll every 3 seconds for simple real-time
+    refetchInterval: 3000,
   });
 
   const sendMessageMutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async (payload: MessagePayload) => {
       if (!otherUserId) throw new Error("No recipient selected");
       return apiRequest("POST", api.messages.create.path, {
         receiverId: otherUserId,
-        content,
+        content: payload.content,
+        attachmentData: payload.attachmentData,
+        attachmentName: payload.attachmentName,
+        attachmentType: payload.attachmentType,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ 
-        queryKey: [buildUrl(api.messages.list.path, { otherUserId: otherUserId || "" })] 
+      queryClient.invalidateQueries({
+        queryKey: [buildUrl(api.messages.list.path, { otherUserId: otherUserId || "" })],
       });
     },
   });
