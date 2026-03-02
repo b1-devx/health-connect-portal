@@ -50,6 +50,7 @@ export interface IStorage {
   getRequestsForPatient(patientId: string): Promise<(PatientRequest & { patient: User })[]>;
   createPatientRequest(request: InsertPatientRequest): Promise<PatientRequest & { patient: User }>;
   updatePatientRequestStatus(id: number, status: string): Promise<PatientRequest & { patient: User }>;
+  updatePatientRequestAiAnalysis(id: number, aiAnalysis: string): Promise<PatientRequest & { patient: User }>;
 
   // Messages
   getMessages(user1Id: string, user2Id: string): Promise<(Message & { sender: User, receiver: User })[]>;
@@ -215,6 +216,12 @@ export class DatabaseStorage implements IStorage {
 
   async updatePatientRequestStatus(id: number, status: string): Promise<PatientRequest & { patient: User }> {
     const [updatedReq] = await db.update(patientRequests).set({ status }).where(eq(patientRequests.id, id)).returning();
+    const [patient] = await db.select().from(users).where(eq(users.id, updatedReq.patientId));
+    return { ...updatedReq, patient };
+  }
+
+  async updatePatientRequestAiAnalysis(id: number, aiAnalysis: string): Promise<PatientRequest & { patient: User }> {
+    const [updatedReq] = await db.update(patientRequests).set({ aiAnalysis }).where(eq(patientRequests.id, id)).returning();
     const [patient] = await db.select().from(users).where(eq(users.id, updatedReq.patientId));
     return { ...updatedReq, patient };
   }

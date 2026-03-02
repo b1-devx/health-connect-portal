@@ -4,6 +4,21 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { isAuthenticated, setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
+  httpOptions: {
+    apiVersion: "",
+    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL,
+  },
+});
+
+function generateMeetLink(): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  const seg = (n: number) => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `https://meet.google.com/${seg(3)}-${seg(4)}-${seg(3)}`;
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -89,7 +104,6 @@ export async function registerRoutes(
   app.patch(api.appointments.update.path, isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      // Let's create a custom schema that supports optional datetime
       const updateSchema = z.object({
         status: z.string().optional(),
         meetLink: z.string().optional(),
@@ -97,6 +111,10 @@ export async function registerRoutes(
         datetime: z.coerce.date().optional()
       });
       const input = updateSchema.parse(req.body);
+      // Auto-generate Google Meet link when confirming an appointment
+      if (input.status === 'confirmed' && !input.meetLink) {
+        input.meetLink = generateMeetLink();
+      }
       const appointment = await storage.updateAppointment(id, input);
       res.json(appointment);
     } catch (err) {
@@ -200,6 +218,53 @@ export async function registerRoutes(
         return res.status(400).json({ message: err.errors[0].message });
       }
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // AI Analysis for patient requests
+  app.post('/api/requests/:id/analyze', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      // Get all requests (doctor) or patient's requests to find this one
+      const userId = req.user.claims.sub;
+      const profile = await storage.getProfile(userId);
+      if (profile?.role !== 'doctor') {
+        return res.status(403).json({ message: 'Only doctors can run AI analysis' });
+      }
+
+      const allRequests = await storage.getRequestsForDoctor(userId);
+      const request = allRequests.find(r => r.id === id);
+      if (!request) return res.status(404).json({ message: 'Request not found' });
+
+      const patientName = `${request.patient.firstName || ''} ${request.patient.lastName || ''}`.trim() || 'Unknown Patient';
+      
+      const contextParts = [
+        `You are a medical AI assistant helping a doctor review a patient request.`,
+        `Patient: ${patientName}`,
+        `Request Type: ${request.type}`,
+        `Patient's Description: ${request.description}`,
+      ];
+      
+      if (request.labResultText) {
+        contextParts.push(`Lab Result Notes Provided by Patient:\n${request.labResultText}`);
+      }
+      if (request.labFileUrl) {
+        contextParts.push(`Lab File URL: ${request.labFileUrl}`);
+      }
+
+      contextParts.push(`\nBased on the above context, provide a concise medical analysis including:\n1. Summary of patient's condition/concern\n2. Key observations from any lab data provided\n3. Suggested considerations or follow-up questions for the doctor\n\nKeep the response clear and professional for a medical setting.`);
+
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: contextParts.join('\n\n'),
+      });
+
+      const analysis = response.text || 'Unable to generate analysis.';
+      const updatedRequest = await storage.updatePatientRequestAiAnalysis(id, analysis);
+      res.json(updatedRequest);
+    } catch (err) {
+      console.error('AI analysis error:', err);
+      res.status(500).json({ message: 'Failed to run AI analysis' });
     }
   });
 

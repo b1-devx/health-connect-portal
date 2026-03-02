@@ -51,6 +51,9 @@ export const patientRequests = pgTable("patient_requests", {
   type: text("type").notNull(), // 'checkup' or 'prescription'
   description: text("description").notNull(),
   status: text("status").notNull().default("pending"), // pending, fulfilled, rejected
+  labFileUrl: text("lab_file_url"), // optional lab result file URL attachment
+  labResultText: text("lab_result_text"), // optional lab result text notes
+  aiAnalysis: text("ai_analysis"), // AI-generated analysis result
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -69,7 +72,7 @@ export const insertProfileSchema = createInsertSchema(profiles, {
 export const insertAppointmentSchema = createInsertSchema(appointments).omit({ id: true, status: true });
 export const insertLabResultSchema = createInsertSchema(labResults).omit({ id: true, date: true });
 export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({ id: true, issuedAt: true });
-export const insertPatientRequestSchema = createInsertSchema(patientRequests).omit({ id: true, status: true, createdAt: true });
+export const insertPatientRequestSchema = createInsertSchema(patientRequests).omit({ id: true, status: true, createdAt: true, aiAnalysis: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 
 // Explicit Types

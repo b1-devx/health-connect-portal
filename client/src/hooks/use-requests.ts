@@ -70,3 +70,29 @@ export function useUpdatePatientRequest() {
     }
   });
 }
+
+export function useAnalyzeRequest() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/requests/${id}/analyze`, {
+        method: 'POST',
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to run analysis");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [api.patientRequests.list.path] });
+      toast({ title: "Analysis Complete", description: "AI analysis has been generated." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Analysis Failed", description: error.message, variant: "destructive" });
+    }
+  });
+}
