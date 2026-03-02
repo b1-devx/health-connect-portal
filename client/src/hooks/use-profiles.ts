@@ -48,6 +48,34 @@ export function useCreateProfile() {
   });
 }
 
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (data: Partial<InsertProfile>) => {
+      const res = await fetch('/api/profiles/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Failed to update profile');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [api.profiles.me.path] });
+      toast({ title: 'Profile Updated', description: 'Your changes have been saved.' });
+    },
+    onError: (error: Error) => {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    },
+  });
+}
+
 export function useDoctors() {
   return useQuery<ProfileWithUser[]>({
     queryKey: [api.profiles.doctors.path],

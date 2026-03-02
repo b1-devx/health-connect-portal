@@ -6,12 +6,14 @@ WellA is a modern healthcare portal that connects patients with doctors. It prov
 
 Key features:
 - Role-based dashboard (doctor vs. patient views)
-- Appointment scheduling with virtual meeting links
-- Lab result upload and management
-- Prescription management (doctors issue, patients view)
+- Appointment scheduling with virtual meeting links and lab file upload (PDF/image, 15 MB)
+- Lab result upload and management (file upload, Gemini AI analysis)
+- Prescription management: doctors issue, patients view; full prescription document view with clinic letterhead, logo, and digital signature
 - Patient request system with AI analysis
-- Direct messaging between doctors and patients
-- Onboarding flow for new users to select their role
+- Direct messaging between doctors and patients (file attachments)
+- Onboarding flow for new users (multi-step, profile photo required)
+- Doctors directory for patients (/doctors page)
+- Profile Settings page (/settings) for all users to edit personal info, and role-specific: doctors can set clinic address, phone, logo, and digital signature for prescriptions
 
 ## User Preferences
 

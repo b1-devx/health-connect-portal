@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
-import { Activity, Calendar, FileText, Pill, Users, Home, Bell, LogOut, Menu, X, MessageSquare, Stethoscope } from "lucide-react";
+import { Activity, Calendar, FileText, Pill, Users, Home, Bell, LogOut, Menu, X, MessageSquare, Stethoscope, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profiles";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     { name: "Prescriptions", href: "/prescriptions", icon: Pill },
     { name: "Requests", href: "/requests", icon: Bell },
     { name: "Messages", href: "/messages", icon: MessageSquare },
+    { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   if (isDoctor) {

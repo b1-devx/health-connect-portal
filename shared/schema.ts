@@ -30,6 +30,12 @@ export const profiles = pgTable("profiles", {
   emergencyContactName: text("emergency_contact_name"),
   emergencyContactRelationship: text("emergency_contact_relationship"),
   emergencyContactPhone: text("emergency_contact_phone"),
+
+  // Doctor clinic info (for prescriptions)
+  clinicAddress: text("clinic_address"),
+  clinicPhone: text("clinic_phone"),
+  clinicLogoData: text("clinic_logo_data"),   // base64 clinic logo/photo
+  signatureData: text("signature_data"),       // base64 digital signature
 });
 
 export const appointments = pgTable("appointments", {
@@ -42,6 +48,8 @@ export const appointments = pgTable("appointments", {
   notes: text("notes"),
   labFileUrl: text("lab_file_url"),
   labResultText: text("lab_result_text"),
+  labFileData: text("lab_file_data"),   // base64 uploaded file
+  labFileName: text("lab_file_name"),   // original filename
   aiAnalysis: text("ai_analysis"),
 });
 

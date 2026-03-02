@@ -17,6 +17,7 @@ import Requests from "@/pages/Requests";
 import Patients from "@/pages/Patients";
 import Doctors from "@/pages/Doctors";
 import Messages from "@/pages/Messages";
+import Settings from "@/pages/Settings";
 import { LoadingScreen } from "@/components/ui-elements";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -63,6 +64,7 @@ function Router() {
       <Route path="/patients" component={() => <ProtectedRoute component={Patients} />} />
       <Route path="/doctors" component={() => <ProtectedRoute component={Doctors} />} />
       <Route path="/messages" component={() => <ProtectedRoute component={Messages} />} />
+      <Route path="/settings" component={() => <ProtectedRoute component={Settings} />} />
       <Route component={NotFound} />
     </Switch>
   );
