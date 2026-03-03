@@ -3,15 +3,14 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { isAuthenticated, setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
+import { isAuthenticated, setupAuth, registerAuthRoutes } from "./auth-supabase";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
-  httpOptions: {
-    apiVersion: "",
-    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL,
-  },
+  apiKey: process.env.GEMINI_API_KEY || process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
+  ...(process.env.AI_INTEGRATIONS_GEMINI_BASE_URL ? {
+    httpOptions: { apiVersion: "", baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL },
+  } : {}),
 });
 
 function generateMeetLink(): string {
