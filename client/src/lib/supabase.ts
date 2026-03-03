@@ -1,11 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co") as string;
-const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || "placeholder-anon-key") as string;
+declare const __SUPABASE_URL__: string;
+declare const __SUPABASE_ANON_KEY__: string;
 
-if (!import.meta.env.VITE_SUPABASE_URL) {
-  console.warn("[WellA] VITE_SUPABASE_URL not set. Set up Supabase credentials to enable authentication.");
+const supabaseUrl = (typeof __SUPABASE_URL__ !== "undefined" ? __SUPABASE_URL__ : "") ||
+  import.meta.env.VITE_SUPABASE_URL ||
+  "https://placeholder.supabase.co";
+
+const supabaseAnonKey = (typeof __SUPABASE_ANON_KEY__ !== "undefined" ? __SUPABASE_ANON_KEY__ : "") ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  "placeholder-anon-key";
+
+if (!supabaseUrl || supabaseUrl === "https://placeholder.supabase.co") {
+  console.warn("[WellA] Supabase URL not configured. Set SUPABASE_URL in your environment.");
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-export const isSupabaseConfigured = !!import.meta.env.VITE_SUPABASE_URL;
+export const isSupabaseConfigured = supabaseUrl !== "https://placeholder.supabase.co" && !!supabaseAnonKey;
