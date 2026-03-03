@@ -47,7 +47,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message, field: err.errors[0].path.join('.') });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/profiles error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -61,7 +62,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message, field: err.errors[0].path.join('.') });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("PUT /api/profiles error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -96,7 +98,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/appointments error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -120,7 +123,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("PATCH /api/appointments error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -148,7 +152,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/lab-results error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -175,7 +180,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/prescriptions error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -202,7 +208,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/requests error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -216,7 +223,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("PATCH /api/requests error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
@@ -327,7 +335,8 @@ export async function registerRoutes(
       if (err instanceof z.ZodError) {
         return res.status(400).json({ message: err.errors[0].message });
       }
-      res.status(500).json({ message: "Internal server error" });
+      console.error("POST /api/messages error:", err);
+      res.status(500).json({ message: (err as Error).message || "Internal server error" });
     }
   });
 
