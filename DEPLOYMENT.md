@@ -42,8 +42,9 @@ This creates all required tables in your Supabase database.
 2. Import the repository at [vercel.com](https://vercel.com)
 3. Framework preset: **Vite** (Vercel usually detects this automatically)
 4. Build settings (already configured in `vercel.json`):
-   - Build Command: `vite build`
+   - Build Command: `vite build && node scripts/bundle-api.mjs`
    - Output Directory: `dist/public`
+   - The build script compiles the frontend (Vite) and bundles the Express API into a single serverless-ready CJS file (`api/server.js`)
 
 ### Environment Variables to set in Vercel
 
