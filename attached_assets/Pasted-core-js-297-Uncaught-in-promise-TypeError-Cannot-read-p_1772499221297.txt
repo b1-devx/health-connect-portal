@@ -1,0 +1,141 @@
+core.js:297 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'payload')
+    at core.js:297:66041
+    at async Tx (core.js:297:65982)
+(anonymous) @ core.js:297
+await in (anonymous)
+Tx @ core.js:297
+Dx @ core.js:336
+(anonymous) @ core.js:342
+Promise.then
+(anonymous) @ core.js:342Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_notifyAllSubscribers @ index-aIE-XqN5.js:50
+_recoverAndRefresh @ index-aIE-XqN5.js:50
+await in _recoverAndRefresh
+_initialize @ index-aIE-XqN5.js:49
+await in _initialize
+(anonymous) @ index-aIE-XqN5.js:49
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+installHook.js:1 Error syncing user: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ installHook.js:1
+Qv @ index-aIE-XqN5.js:50
+await in Qv
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_notifyAllSubscribers @ index-aIE-XqN5.js:50
+_recoverAndRefresh @ index-aIE-XqN5.js:50
+await in _recoverAndRefresh
+_initialize @ index-aIE-XqN5.js:49
+await in _initialize
+(anonymous) @ index-aIE-XqN5.js:49
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user net::ERR_ABORTED 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+Promise.then
+(anonymous) @ index-aIE-XqN5.js:50
+Hl @ index-aIE-XqN5.js:8
+Ei @ index-aIE-XqN5.js:8
+xy @ index-aIE-XqN5.js:8
+$n @ index-aIE-XqN5.js:6
+T1 @ index-aIE-XqN5.js:8
+js @ index-aIE-XqN5.js:8
+wy @ index-aIE-XqN5.js:8
+R @ index-aIE-XqN5.js:1
+re @ index-aIE-XqN5.js:1Understand this error
+installHook.js:1 Error syncing user: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ installHook.js:1
+Qv @ index-aIE-XqN5.js:50
+await in Qv
+(anonymous) @ index-aIE-XqN5.js:50
+Promise.then
+(anonymous) @ index-aIE-XqN5.js:50
+Hl @ index-aIE-XqN5.js:8
+Ei @ index-aIE-XqN5.js:8
+xy @ index-aIE-XqN5.js:8
+$n @ index-aIE-XqN5.js:6
+T1 @ index-aIE-XqN5.js:8
+js @ index-aIE-XqN5.js:8
+wy @ index-aIE-XqN5.js:8
+R @ index-aIE-XqN5.js:1
+re @ index-aIE-XqN5.js:1Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user net::ERR_ABORTED 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+Promise.then
+(anonymous) @ index-aIE-XqN5.js:50
+Hl @ index-aIE-XqN5.js:8
+Ei @ index-aIE-XqN5.js:8
+(anonymous) @ index-aIE-XqN5.js:8
+R @ index-aIE-XqN5.js:1
+re @ index-aIE-XqN5.js:1Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user net::ERR_ABORTED 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_useSession @ index-aIE-XqN5.js:50
+await in _useSession
+_emitInitialSession @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user net::ERR_ABORTED 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_useSession @ index-aIE-XqN5.js:50
+await in _useSession
+_emitInitialSession @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+installHook.js:1 Error syncing user: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ installHook.js:1
+Qv @ index-aIE-XqN5.js:50
+await in Qv
+(anonymous) @ index-aIE-XqN5.js:50
+Promise.then
+(anonymous) @ index-aIE-XqN5.js:50
+Hl @ index-aIE-XqN5.js:8
+Ei @ index-aIE-XqN5.js:8
+(anonymous) @ index-aIE-XqN5.js:8
+R @ index-aIE-XqN5.js:1
+re @ index-aIE-XqN5.js:1Understand this error
+2installHook.js:1 Error syncing user: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+overrideMethod @ installHook.js:1
+Qv @ index-aIE-XqN5.js:50
+await in Qv
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_useSession @ index-aIE-XqN5.js:50
+await in _useSession
+_emitInitialSession @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_notifyAllSubscribers @ index-aIE-XqN5.js:50
+_recoverAndRefresh @ index-aIE-XqN5.js:50
+await in _recoverAndRefresh
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+index-aIE-XqN5.js:50  POST https://health-connect-portal-delta.vercel.app/api/auth/sync-user net::ERR_ABORTED 405 (Method Not Allowed)
+Qv @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+_notifyAllSubscribers @ index-aIE-XqN5.js:50
+_recoverAndRefresh @ index-aIE-XqN5.js:50
+await in _recoverAndRefresh
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:50
+(anonymous) @ index-aIE-XqN5.js:34Understand this error
+2installHook.js:1 Error syncing user: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
