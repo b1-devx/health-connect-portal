@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
 import type { InsertProfile, Profile } from "@shared/schema";
-import { isUnauthorizedError } from "@/lib/auth-utils";
+import { authFetch } from "@/lib/auth-fetch";
 
 type ProfileWithUser = Profile & { user: any };
 
@@ -10,7 +10,7 @@ export function useProfile() {
   return useQuery<ProfileWithUser | null>({
     queryKey: [api.profiles.me.path],
     queryFn: async () => {
-      const res = await fetch(api.profiles.me.path, { credentials: "include" });
+      const res = await authFetch(api.profiles.me.path);
       if (res.status === 401) return null;
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch profile");
@@ -26,11 +26,10 @@ export function useCreateProfile() {
 
   return useMutation({
     mutationFn: async (data: InsertProfile) => {
-      const res = await fetch(api.profiles.create.path, {
+      const res = await authFetch(api.profiles.create.path, {
         method: api.profiles.create.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        credentials: "include",
       });
       if (!res.ok) {
         const error = await res.json();
@@ -54,11 +53,10 @@ export function useUpdateProfile() {
 
   return useMutation({
     mutationFn: async (data: Partial<InsertProfile>) => {
-      const res = await fetch('/api/profiles/me', {
+      const res = await authFetch('/api/profiles/me', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-        credentials: 'include',
       });
       if (!res.ok) {
         const error = await res.json();
@@ -80,7 +78,7 @@ export function useDoctors() {
   return useQuery<ProfileWithUser[]>({
     queryKey: [api.profiles.doctors.path],
     queryFn: async () => {
-      const res = await fetch(api.profiles.doctors.path, { credentials: "include" });
+      const res = await authFetch(api.profiles.doctors.path);
       if (!res.ok) throw new Error("Failed to fetch doctors");
       return res.json();
     }
@@ -91,7 +89,7 @@ export function usePatients() {
   return useQuery<ProfileWithUser[]>({
     queryKey: [api.profiles.patients.path],
     queryFn: async () => {
-      const res = await fetch(api.profiles.patients.path, { credentials: "include" });
+      const res = await authFetch(api.profiles.patients.path);
       if (!res.ok) throw new Error("Failed to fetch patients");
       return res.json();
     }

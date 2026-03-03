@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
-import { apiRequest } from "@/lib/queryClient";
 import type { Message } from "@shared/schema";
+import { authFetch } from "@/lib/auth-fetch";
 
 export interface MessagePayload {
   content: string;
@@ -17,7 +17,7 @@ export function useMessages(otherUserId?: string) {
     queryKey: [buildUrl(api.messages.list.path, { otherUserId: otherUserId || "" })],
     queryFn: async () => {
       if (!otherUserId) return [];
-      const res = await fetch(buildUrl(api.messages.list.path, { otherUserId }), { credentials: "include" });
+      const res = await authFetch(buildUrl(api.messages.list.path, { otherUserId }));
       if (!res.ok) throw new Error("Failed to fetch messages");
       return res.json();
     },
@@ -28,13 +28,19 @@ export function useMessages(otherUserId?: string) {
   const sendMessageMutation = useMutation({
     mutationFn: async (payload: MessagePayload) => {
       if (!otherUserId) throw new Error("No recipient selected");
-      return apiRequest("POST", api.messages.create.path, {
-        receiverId: otherUserId,
-        content: payload.content,
-        attachmentData: payload.attachmentData,
-        attachmentName: payload.attachmentName,
-        attachmentType: payload.attachmentType,
+      const res = await authFetch(api.messages.create.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          receiverId: otherUserId,
+          content: payload.content,
+          attachmentData: payload.attachmentData,
+          attachmentName: payload.attachmentName,
+          attachmentType: payload.attachmentType,
+        }),
       });
+      if (!res.ok) throw new Error("Failed to send message");
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

@@ -2,12 +2,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
 import type { InsertPatientRequest } from "@shared/schema";
+import { authFetch } from "@/lib/auth-fetch";
 
 export function usePatientRequests() {
   return useQuery<any[]>({
     queryKey: [api.patientRequests.list.path],
     queryFn: async () => {
-      const res = await fetch(api.patientRequests.list.path, { credentials: "include" });
+      const res = await authFetch(api.patientRequests.list.path);
       if (!res.ok) throw new Error("Failed to fetch requests");
       return res.json();
     }
@@ -20,11 +21,10 @@ export function useCreatePatientRequest() {
 
   return useMutation({
     mutationFn: async (data: InsertPatientRequest) => {
-      const res = await fetch(api.patientRequests.create.path, {
+      const res = await authFetch(api.patientRequests.create.path, {
         method: api.patientRequests.create.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        credentials: "include",
       });
       if (!res.ok) {
         const error = await res.json();
@@ -49,11 +49,10 @@ export function useUpdatePatientRequest() {
   return useMutation({
     mutationFn: async ({ id, status }: { id: number, status: string }) => {
       const url = buildUrl(api.patientRequests.update.path, { id });
-      const res = await fetch(url, {
+      const res = await authFetch(url, {
         method: api.patientRequests.update.method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
-        credentials: "include",
       });
       if (!res.ok) {
         const error = await res.json();
@@ -77,10 +76,7 @@ export function useAnalyzeRequest() {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      const res = await fetch(`/api/requests/${id}/analyze`, {
-        method: 'POST',
-        credentials: "include",
-      });
+      const res = await authFetch(`/api/requests/${id}/analyze`, { method: 'POST' });
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.message || "Failed to run analysis");
