@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import { registerRoutes } from "./routes";
 
 const app = express();
@@ -12,19 +11,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
-const distPath = path.join(process.cwd(), "dist", "public");
-
-// Serve built frontend static assets
-app.use(express.static(distPath));
-
-const initPromise = (async () => {
-  await registerRoutes(null as any, app);
-
-  // SPA fallback — must be registered AFTER all API routes
-  app.use((_req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
-  });
-})();
+const initPromise = registerRoutes(null as any, app);
 
 export default async function handler(req: any, res: any) {
   await initPromise;

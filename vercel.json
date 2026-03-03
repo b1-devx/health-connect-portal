@@ -1,13 +1,22 @@
 {
   "version": 2,
   "buildCommand": "vite build && node scripts/bundle-api.mjs",
+  "outputDirectory": "dist/public",
   "functions": {
     "api/server.js": {
-      "includeFiles": "dist/public/**",
       "maxDuration": 30
     }
   },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api/server" }
+    { "source": "/api/:path*", "destination": "/api/server" },
+    { "source": "/onboarding", "destination": "/index.html" },
+    { "source": "/appointments", "destination": "/index.html" },
+    { "source": "/lab-results", "destination": "/index.html" },
+    { "source": "/prescriptions", "destination": "/index.html" },
+    { "source": "/requests", "destination": "/index.html" },
+    { "source": "/patients", "destination": "/index.html" },
+    { "source": "/doctors", "destination": "/index.html" },
+    { "source": "/messages", "destination": "/index.html" },
+    { "source": "/settings", "destination": "/index.html" }
   ]
 }
